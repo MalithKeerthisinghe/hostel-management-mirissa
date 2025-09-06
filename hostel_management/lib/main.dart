@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hostel_management/Screens/AuthScreen/auth_screen.dart';
+import 'package:hostel_management/Screens/OnBoardScreens/on_board_screen.dart';
 import 'package:hostel_management/Screens/splash_screen.dart';
 
 void main() {
@@ -12,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
