@@ -166,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                   child: CircleAvatar(
                     radius: 20,
-                    backgroundImage: AssetImage(''),
+                    backgroundImage: AssetImage('assets/img.png'),
                   ),
                 ),
                 SizedBox(width: MediaQuery.of(context).size.width * 0.13),
@@ -417,9 +417,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     ),
                     child: CircleAvatar(
                       radius: 20,
-                      backgroundImage: NetworkImage(
-                        'https://via.placeholder.com/40',
-                      ),
+                      backgroundImage: AssetImage('assets/img.png'),
                     ),
                   ),
                   SizedBox(width: 16),
