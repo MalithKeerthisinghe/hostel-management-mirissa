@@ -14,7 +14,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(Duration(seconds: 3), () {
-      Navigator.push(context, ScalePageRoute(page: OnBoardScreen()));
+      Navigator.pushReplacement(context, ScalePageRoute(page: OnBoardScreen()));
     });
     super.initState();
   }
@@ -22,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFFFFFFF),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

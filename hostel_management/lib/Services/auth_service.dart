@@ -35,14 +35,27 @@ class ApiService {
     return _handleResponse(response);
   }
 
+  //get user profile
+  static Future<Map<String, dynamic>> getUserProfile(String userId) async {
+    final url = Uri.parse('$baseUrl/profile');
+    final response = await http.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({"userId": userId}),
+    );
+    print('Response body profile: ${response.body}');
+    return _handleResponse(response);
+  }
+
   // Forgot Password (Send OTP)
   static Future<Map<String, dynamic>> forgotPassword(String email) async {
-    final url = Uri.parse('$baseUrl/forgot-password');
+    final url = Uri.parse('$baseUrl/request-reset');
     final response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({"email": email}),
     );
+    print('Response body forgot: ${response.body}');
     return _handleResponse(response);
   }
 

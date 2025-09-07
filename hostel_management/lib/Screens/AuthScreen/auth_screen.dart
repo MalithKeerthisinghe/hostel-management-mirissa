@@ -241,7 +241,7 @@ class _AuthScreenState extends State<AuthScreen>
 
       Navigator.of(context).pop(); // Close loading dialog
 
-      if (response['success'] == true) {
+      if (response['success'] == 'OTP sent to email') {
         // Navigate to OTP verification screen
         Navigator.push(
           context,
@@ -294,101 +294,115 @@ class _AuthScreenState extends State<AuthScreen>
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(height: MediaQuery.of(context).size.height * 0.12),
-            // Logo
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(shape: BoxShape.circle),
-              child: Center(
-                child: Image(image: AssetImage('assets/splash_logo.png')),
-              ),
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight:
+                  MediaQuery.of(context).size.height -
+                  MediaQuery.of(context).padding.top -
+                  MediaQuery.of(context).padding.bottom,
             ),
-            SizedBox(height: 24),
-
-            // Welcome Text
-            InterTextWidget(
-              text: 'Welcome',
-              fontSize: 24,
-              color: Color(0xFF111827),
-              fontWeight: FontWeightConst.bold,
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Sign in to your account or create a new one',
-              style: GoogleFonts.inter(
-                fontSize: 16,
-                color: Color(0xFF4B5563),
-                fontWeight: FontWeight.w400,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 32),
-
-            // Tab Bar
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 24),
-              child: TabBar(
-                controller: _tabController,
-                dividerColor: Colors.transparent,
-                labelColor: Color(0xFF111827),
-                unselectedLabelColor: Color(0xFF9CA3AF),
-                automaticIndicatorColorAdjustment: false,
-
-                labelStyle: GoogleFonts.inter(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-                labelPadding: EdgeInsets.symmetric(horizontal: 4),
-                unselectedLabelStyle: GoogleFonts.inter(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
-                overlayColor: WidgetStateProperty.all(Colors.transparent),
-                indicatorColor: Color(0xFF0EA5E9),
-                indicatorWeight: 2,
-                tabs: [
-                  Tab(text: 'Sign In'),
-                  Tab(text: 'Sign Up'),
-                  Tab(text: 'Forgot Password?'),
-                ],
-              ),
-            ),
-            SizedBox(height: 24),
-
-            // Error message
-            if (_errorMessage.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Text(
-                  _errorMessage,
-                  style: TextStyle(color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            if (_errorMessage.isNotEmpty) SizedBox(height: 12),
-
-            // Tab Bar View
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
+            child: IntrinsicHeight(
+              child: Column(
                 children: [
-                  _buildSignInTab(),
-                  _buildSignUpTab(),
-                  _buildForgotPasswordTab(),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.12),
+                  // Logo
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(shape: BoxShape.circle),
+                    child: Center(
+                      child: Image(image: AssetImage('assets/splash_logo.png')),
+                    ),
+                  ),
+                  SizedBox(height: 24),
+
+                  // Welcome Text
+                  InterTextWidget(
+                    text: 'Welcome',
+                    fontSize: 24,
+                    color: Color(0xFF111827),
+                    fontWeight: FontWeightConst.bold,
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Sign in to your account or create a new one',
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      color: Color(0xFF4B5563),
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 32),
+
+                  // Tab Bar
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 24),
+                    child: TabBar(
+                      controller: _tabController,
+                      dividerColor: Colors.transparent,
+                      labelColor: Color(0xFF111827),
+                      unselectedLabelColor: Color(0xFF9CA3AF),
+                      automaticIndicatorColorAdjustment: false,
+                      labelStyle: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      labelPadding: EdgeInsets.symmetric(horizontal: 4),
+                      unselectedLabelStyle: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      overlayColor: WidgetStateProperty.all(Colors.transparent),
+                      indicatorColor: Color(0xFF0EA5E9),
+                      indicatorWeight: 2,
+                      tabs: [
+                        Tab(text: 'Sign In'),
+                        Tab(text: 'Sign Up'),
+                        Tab(text: 'Forgot Password?'),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 24),
+
+                  // Error message
+                  if (_errorMessage.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                        _errorMessage,
+                        style: TextStyle(color: Colors.red),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  if (_errorMessage.isNotEmpty) SizedBox(height: 12),
+
+                  // Tab Bar View - Remove Expanded and give it a fixed height
+                  SizedBox(
+                    height:
+                        MediaQuery.of(context).size.height *
+                        0.6, // Adjust this value as needed
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        _buildSignInTab(),
+                        _buildSignUpTab(),
+                        _buildForgotPasswordTab(),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildSignInTab() {
-    return SingleChildScrollView(
+    return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
       child: Column(
         children: [
@@ -513,104 +527,109 @@ class _AuthScreenState extends State<AuthScreen>
   }
 
   Widget _buildSignUpTab() {
-    return SingleChildScrollView(
+    return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        children: [
-          CustomTextFromBox(
-            labelText: 'Enter your first name',
-            controller: _firstNameController,
-            focusNode: _firstNameFocusNode,
-          ),
-          CustomTextFromBox(
-            labelText: 'Enter your email',
-            controller: _emailController,
-            focusNode: _emailFocusNode,
-          ),
-          CustomTextFromBox(
-            labelText: 'Enter your password',
-            isPassword: true,
-            controller: _passwordController,
-            focusNode: _passwordFocusNode,
-          ),
-          CustomTextFromBox(
-            labelText: 'Confirm your password',
-            isPassword: true,
-            controller: _confirmPasswordController,
-            focusNode: _confirmPasswordFocusNode,
-          ),
-          SizedBox(height: 8),
-
-          GestureDetector(
-            onTap: _isLoading ? null : _handleSignUp,
-            child: GradientButton(
-              text: 'Sign UP',
-              width: MediaQuery.of(context).size.width,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            CustomTextFromBox(
+              labelText: 'Enter your first name',
+              controller: _firstNameController,
+              focusNode: _firstNameFocusNode,
             ),
-          ),
-
-          SizedBox(height: 24),
-          Text(
-            'Or Sign up with',
-            style: GoogleFonts.inter(fontSize: 14, color: Color(0xFF9CA3AF)),
-          ),
-          SizedBox(height: 24),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildSocialButton(text: 'assets/google.png', onPressed: () {}),
-              SizedBox(width: 48),
-              _buildSocialButton(text: 'assets/facebook.png', onPressed: () {}),
-            ],
-          ),
-
-          SizedBox(height: MediaQuery.of(context).size.height * 0.09),
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+            CustomTextFromBox(
+              labelText: 'Enter your email',
+              controller: _emailController,
+              focusNode: _emailFocusNode,
             ),
-            child: Text.rich(
-              TextSpan(
-                text: 'By signing up you agree to our\n ',
-                style: GoogleFonts.inter(
-                  fontSize: 16,
-                  color: Color(0xFF78828A),
-                ),
-                children: [
-                  TextSpan(
-                    text: 'Terms',
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Color(0xFF171725),
-                    ),
-                  ),
-                  TextSpan(
-                    text: ' and ',
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Color(0xFF78828A),
-                    ),
-                  ),
-                  TextSpan(
-                    text: 'Conditions of Use',
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Color(0xFF171725),
-                    ),
-                  ),
-                ],
+            CustomTextFromBox(
+              labelText: 'Enter your password',
+              isPassword: true,
+              controller: _passwordController,
+              focusNode: _passwordFocusNode,
+            ),
+            CustomTextFromBox(
+              labelText: 'Confirm your password',
+              isPassword: true,
+              controller: _confirmPasswordController,
+              focusNode: _confirmPasswordFocusNode,
+            ),
+            SizedBox(height: 8),
+
+            GestureDetector(
+              onTap: _isLoading ? null : _handleSignUp,
+              child: GradientButton(
+                text: 'Sign UP',
+                width: MediaQuery.of(context).size.width,
               ),
-              textAlign: TextAlign.center,
             ),
-          ),
-        ],
+
+            SizedBox(height: 24),
+            Text(
+              'Or Sign up with',
+              style: GoogleFonts.inter(fontSize: 14, color: Color(0xFF9CA3AF)),
+            ),
+            SizedBox(height: 24),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildSocialButton(text: 'assets/google.png', onPressed: () {}),
+                SizedBox(width: 48),
+                _buildSocialButton(
+                  text: 'assets/facebook.png',
+                  onPressed: () {},
+                ),
+              ],
+            ),
+
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+              ),
+              child: Text.rich(
+                TextSpan(
+                  text: 'By signing up you agree to our\n ',
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    color: Color(0xFF78828A),
+                  ),
+                  children: [
+                    TextSpan(
+                      text: 'Terms',
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        color: Color(0xFF171725),
+                      ),
+                    ),
+                    TextSpan(
+                      text: ' and ',
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        color: Color(0xFF78828A),
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'Conditions of Use',
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        color: Color(0xFF171725),
+                      ),
+                    ),
+                  ],
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildForgotPasswordTab() {
-    return SingleChildScrollView(
+    return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
       child: Column(
         children: [

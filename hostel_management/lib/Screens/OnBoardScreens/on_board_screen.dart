@@ -274,7 +274,10 @@ class _OnBoardScreenState extends State<OnBoardScreen>
                 buttonText: 'Login or Signup',
                 onButtonPressed: () {
                   // Navigate to login/signup screen
-                  Navigator.push(context, FadePageRoute(page: AuthScreen()));
+                  Navigator.pushReplacement(
+                    context,
+                    FadePageRoute(page: AuthScreen()),
+                  );
                   print('Navigate to login/signup');
                 },
                 bottomWidget: Positioned(
