@@ -198,6 +198,7 @@ class _AuthScreenState extends State<AuthScreen>
 
     try {
       final response = await ApiService.register(
+        _firstNameController.text,
         _emailController.text,
         _passwordController.text,
       );

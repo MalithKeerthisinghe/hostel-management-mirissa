@@ -7,6 +7,7 @@ class ApiService {
 
   // Register
   static Future<Map<String, dynamic>> register(
+    String name,
     String email,
     String password,
   ) async {
@@ -14,7 +15,7 @@ class ApiService {
     final response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"email": email, "password": password}),
+      body: jsonEncode({"name": name, "email": email, "password": password}),
     );
     print('Response body: ${response.body}');
     return _handleResponse(response);
