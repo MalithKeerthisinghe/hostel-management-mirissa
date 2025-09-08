@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hostel_management/Screens/AuthScreen/auth_screen.dart';
 import 'package:hostel_management/Screens/OnBoardScreens/on_board_screen.dart';
+import 'package:hostel_management/Screens/emptyPage.dart';
 import 'package:hostel_management/Screens/splash_screen.dart';
 
 void main() {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: SplashScreen(),
+      home: EmptyPage(),
     );
   }
 }
