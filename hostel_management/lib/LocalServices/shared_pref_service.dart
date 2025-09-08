@@ -4,13 +4,13 @@ class SharedPrefService {
   static const String userId = 'userId';
 
   //save user id
-  Future<void> saveUserId(String id) async {
+  static Future<void> saveUserId(String id) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(userId, id);
   }
 
   //get user id
-  Future<String?> getUserId() async {
+  static Future<String?> getUserId() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(userId);
   }

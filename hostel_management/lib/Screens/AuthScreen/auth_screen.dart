@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hostel_management/Const/font_weight_const.dart';
+import 'package:hostel_management/LocalServices/shared_pref_service.dart';
 import 'package:hostel_management/Screens/AuthScreen/create_new_password.dart';
 import 'package:hostel_management/Screens/AuthScreen/otp_verification_screen.dart';
 import 'package:hostel_management/Screens/HomeScreen/home_screen.dart';
@@ -202,6 +203,8 @@ class _AuthScreenState extends State<AuthScreen>
         _emailController.text,
         _passwordController.text,
       );
+      // Save user ID to shared preferences
+      SharedPrefService.saveUserId(response['userId']);
 
       Navigator.of(context).pop(); // Close loading dialog
       Navigator.push(context, ScalePageRoute(page: HomeScreen()));
