@@ -221,6 +221,7 @@ class _AuthScreenState extends State<AuthScreen>
 
   // Handle forgot password
   Future<void> _handleForgotPassword() async {
+    print('Forgot password for email: ${_emailController.text} $_isLoading');
     // Hide keyboard when submitting
     FocusManager.instance.primaryFocus?.unfocus();
 
@@ -238,7 +239,7 @@ class _AuthScreenState extends State<AuthScreen>
 
     try {
       final response = await ApiService.forgotPassword(_emailController.text);
-
+      print('Forgot password response: ${response['message']}');
       Navigator.of(context).pop(); // Close loading dialog
 
       if (response['success'] == 'OTP sent to email') {
@@ -252,6 +253,7 @@ class _AuthScreenState extends State<AuthScreen>
           ),
         );
       } else {
+        print('Response body: ${response['message']}');
         _showErrorMessage(response['message'] ?? 'Failed to send OTP');
         _showErrorDialog(_errorMessage);
       }

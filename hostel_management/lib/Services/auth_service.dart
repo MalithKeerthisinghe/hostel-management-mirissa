@@ -3,14 +3,14 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   static const String baseUrl =
-      "http://69.10.53.116:5000"; // Change to your server URL
+      "http://69.10.53.116:5000/api"; // Change to your server URL
 
   // Register
   static Future<Map<String, dynamic>> register(
     String email,
     String password,
   ) async {
-    final url = Uri.parse('$baseUrl/register');
+    final url = Uri.parse('$baseUrl/auth/register');
     final response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
@@ -25,7 +25,7 @@ class ApiService {
     String email,
     String password,
   ) async {
-    final url = Uri.parse('$baseUrl/login');
+    final url = Uri.parse('$baseUrl/auth/login');
     final response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
@@ -37,7 +37,7 @@ class ApiService {
 
   //get user profile
   static Future<Map<String, dynamic>> getUserProfile(String userId) async {
-    final url = Uri.parse('$baseUrl/profile');
+    final url = Uri.parse('$baseUrl/auth/profile');
     final response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
@@ -49,7 +49,7 @@ class ApiService {
 
   // Forgot Password (Send OTP)
   static Future<Map<String, dynamic>> forgotPassword(String email) async {
-    final url = Uri.parse('$baseUrl/request-reset');
+    final url = Uri.parse('$baseUrl/auth/request-reset');
     final response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
@@ -64,7 +64,7 @@ class ApiService {
     String email,
     String otp,
   ) async {
-    final url = Uri.parse('$baseUrl/verify-otp');
+    final url = Uri.parse('$baseUrl/auth/verify-otp');
     final response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
@@ -78,7 +78,7 @@ class ApiService {
     String email,
     String newPassword,
   ) async {
-    final url = Uri.parse('$baseUrl/reset-password');
+    final url = Uri.parse('$baseUrl/auth/reset-password');
     final response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
