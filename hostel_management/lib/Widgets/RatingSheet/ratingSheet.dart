@@ -56,6 +56,7 @@ class _RatingSheetTopState extends State<RatingSheetTop> {
   double _sheetHeightFraction = 0.6; // start at 60%
   final double _minFraction = 0.4;
   final double _snapToFullThreshold = 0.85;
+  String? _expandedReviewUser;
 
   // used to track a drag
   double _dragStartGlobalY = 0.0;
@@ -71,7 +72,7 @@ class _RatingSheetTopState extends State<RatingSheetTop> {
       avatarPath: "assets/Profile1.png",
       date: "1 day ago",
       text:
-          "Amazing! The room is good than the picture. Thanks for amazing experience!",
+          "Amazing! The room is good than the picture. Thanks for amazing experience!hghghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
       rating: 4.5,
       reviewCount: 19,
     ),
@@ -361,77 +362,135 @@ class _RatingSheetTopState extends State<RatingSheetTop> {
   }
 
   Widget _buildReviewCard(Review review) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16.0),
-      padding: const EdgeInsets.only(top: 12.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundImage: AssetImage(review.avatarPath),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "${review.userName} (${review.reviewCount} Reviews)",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                            softWrap: true, // Allow text to wrap
-                            maxLines: 2, // Optional: Limit to 2 lines
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.star_rounded,
-                              color: Colors.amber,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 2),
-                            Text(
-                              review.rating.toString(),
+    bool isExpanded = _expandedReviewUser == review.userName;
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          if (_expandedReviewUser == review.userName) {
+            _expandedReviewUser = null; // collapse if already expanded
+          } else {
+            _expandedReviewUser = review.userName; // expand this review
+          }
+        });
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16.0),
+        padding: const EdgeInsets.only(top: 12.0, left: 8, right: 8, bottom: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// --- Header
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 20,
+                  backgroundImage: AssetImage(review.avatarPath),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "${review.userName} (${review.reviewCount} Reviews)",
                               style: const TextStyle(
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
                               ),
+                              softWrap: true,
+                              maxLines: 2,
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Text(
-                      review.date,
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                    ),
+                          ),
+                          const SizedBox(width: 10),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.star_rounded,
+                                color: Colors.amber,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 2),
+                              Text(
+                                review.rating.toString(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Text(
+                        review.date,
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 10),
+
+            /// --- Review text
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal:
+                    isExpanded
+                        ? 1.0
+                        : 50.0, // Adjust padding based on expansion
+              ),
+              child: Text(
+                review.text,
+                maxLines: isExpanded ? null : 2, // Expand/collapse
+                overflow:
+                    isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+                textAlign:
+                    isExpanded
+                        ? TextAlign.left
+                        : TextAlign.justify, // Left-align when expanded
+              ),
+            ),
+
+            /// --- Extra details only if expanded
+            if (isExpanded) ...[
+              const SizedBox(height: 12),
+
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    _buildTagContainer("Private Room"),
+                    const SizedBox(width: 7),
+                    _buildTagContainer("Clean"),
+                    const SizedBox(width: 7),
+                    _buildTagContainer("Great Location"),
+                    const SizedBox(width: 7),
+                    _buildTagContainer("Peaceful"),
                   ],
                 ),
               ),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.start, // Align images to the start
+                children: [
+                  _buildReviewImage('assets/reviewImage1.png'),
+                  const SizedBox(width: 8), // Spacing between images
+                  _buildReviewImage('assets/reviewImage2.png'),
+                  const SizedBox(width: 8),
+                  _buildReviewImage('assets/reviewImage3.png'),
+                ],
+              ),
             ],
-          ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 50.0,
-              vertical: 10.0,
-            ),
-            child: Text(
-              review.text,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -466,6 +525,44 @@ class _RatingSheetTopState extends State<RatingSheetTop> {
           ),
         ),
       ],
+    );
+  }
+
+  // Helper method to build each tag container
+  Widget _buildTagContainer(String text) {
+    return Container(
+      height: 29,
+      padding: const EdgeInsets.symmetric(horizontal: 16), // Adjustable padding
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: Colors.grey[300],
+      ),
+      child: Center(
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Helper method to build each image
+  Widget _buildReviewImage(String imagePath) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8), // Rounded corners for images
+      child: Image.asset(
+        imagePath,
+        width: 100, // Fixed width for consistency
+        height: 100, // Fixed height for consistency
+        fit: BoxFit.cover, // Ensure image fits within bounds
+        errorBuilder: (context, error, stackTrace) {
+          return Container(width: 100, height: 100, color: Colors.grey[300]);
+        },
+      ),
     );
   }
 }
