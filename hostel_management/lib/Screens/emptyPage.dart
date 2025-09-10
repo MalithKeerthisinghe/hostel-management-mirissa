@@ -11,7 +11,7 @@ class EmptyPage extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            RatingSheetTop.show(context);
+            RatingSheetTop.show(context, isLoggedIn: true);
           },
           child: const Text("Rating Sheet (Top)"),
         ),

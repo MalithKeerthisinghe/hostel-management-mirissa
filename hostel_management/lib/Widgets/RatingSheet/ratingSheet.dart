@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class RatingSheetTop extends StatefulWidget {
-  const RatingSheetTop({super.key});
+  final bool isLoggedIn;
 
-  static void show(BuildContext context) {
+  const RatingSheetTop({super.key, required this.isLoggedIn});
+
+  static void show(BuildContext context, {required bool isLoggedIn}) {
     Navigator.of(context).push(
       PageRouteBuilder(
         opaque: false,
         pageBuilder:
-            (context, animation, secondaryAnimation) => const RatingSheetTop(),
+            (context, animation, secondaryAnimation) =>
+                RatingSheetTop(isLoggedIn: isLoggedIn),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(0.0, -1.0);
           const end = Offset.zero;
@@ -207,7 +210,11 @@ class _RatingSheetTopState extends State<RatingSheetTop> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 15),
+
+                            /// ✅ Extra content for logged-in users
+                            if (widget.isLoggedIn)
+                              _buildExtraContentForLoggedInUsers(),
 
                             /// 🔥 Reviews section scrollable
                             Expanded(
@@ -592,6 +599,49 @@ class _RatingSheetTopState extends State<RatingSheetTop> {
           return Container(width: 100, height: 100, color: Colors.grey[300]);
         },
       ),
+    );
+  }
+
+  Widget _buildExtraContentForLoggedInUsers() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Divider(thickness: 2), // 🔹 First divider
+
+        const SizedBox(height: 8),
+        const Text(
+          "Rate and Review",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 10),
+
+        // 🔹 Row with avatar and stars
+        Row(
+          children: [
+            const CircleAvatar(
+              radius: 17,
+              backgroundImage: AssetImage(
+                "assets/profile6.png",
+              ), // replace with actual path
+            ),
+            const SizedBox(width: 12),
+
+            // Generate 5 star icons
+            Row(
+              children: List.generate(5, (index) {
+                return Icon(
+                  Icons.star, // outlined star by default
+                  color: Color(0xFFE3E9ED),
+                  size: 28,
+                );
+              }),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 10),
+        const Divider(thickness: 2), // 🔹 Second divider
+      ],
     );
   }
 }
