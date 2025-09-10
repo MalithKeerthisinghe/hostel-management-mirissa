@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class RatingSheetTop extends StatefulWidget {
   const RatingSheetTop({super.key});
@@ -186,7 +187,7 @@ class _RatingSheetTopState extends State<RatingSheetTop> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 15),
 
                             if (_isExpanded) ...[
                               _buildHeader(),
@@ -477,15 +478,43 @@ class _RatingSheetTopState extends State<RatingSheetTop> {
                 ),
               ),
               const SizedBox(height: 12),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Row(
+                    mainAxisAlignment:
+                        MainAxisAlignment.start, // Align images to the start
+                    children: [
+                      _buildReviewImage('assets/reviewImage1.png'),
+                      const SizedBox(width: 8), // Spacing between images
+                      _buildReviewImage('assets/reviewImage2.png'),
+                      const SizedBox(width: 8),
+                      _buildReviewImage('assets/reviewImage3.png'),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
               Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.start, // Align images to the start
                 children: [
-                  _buildReviewImage('assets/reviewImage1.png'),
-                  const SizedBox(width: 8), // Spacing between images
-                  _buildReviewImage('assets/reviewImage2.png'),
-                  const SizedBox(width: 8),
-                  _buildReviewImage('assets/reviewImage3.png'),
+                  Icon(Icons.favorite_border, color: Colors.black),
+                  const SizedBox(width: 10),
+                  Text(
+                    "Press and hold to react",
+                    style: TextStyle(color: Colors.black, fontSize: 14),
+                  ),
+                  Spacer(),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: SvgPicture.asset(
+                      'assets/icons/shareSquare.svg',
+                      width: 24,
+                      height: 24,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -556,8 +585,8 @@ class _RatingSheetTopState extends State<RatingSheetTop> {
       borderRadius: BorderRadius.circular(8), // Rounded corners for images
       child: Image.asset(
         imagePath,
-        width: 100, // Fixed width for consistency
-        height: 100, // Fixed height for consistency
+        width: 95, // Fixed width for consistency
+        height: 95, // Fixed height for consistency
         fit: BoxFit.cover, // Ensure image fits within bounds
         errorBuilder: (context, error, stackTrace) {
           return Container(width: 100, height: 100, color: Colors.grey[300]);
