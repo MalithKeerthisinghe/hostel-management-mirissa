@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'loggedRatingSheet.dart';
+
 class RatingSheetTop extends StatefulWidget {
   final bool isLoggedIn;
 
@@ -318,12 +320,13 @@ class _RatingSheetTopState extends State<RatingSheetTop> {
           mainAxisSize: MainAxisSize.min,
           children: List.generate(5, (index) {
             return Icon(
-              index < 4 ? Icons.star_rounded : Icons.star_border_rounded,
-              color: Colors.amber,
+              Icons.star_rounded,
+              color: index == 4 ? const Color(0xFFE3E9ED) : Colors.amber,
               size: 24,
             );
           }),
         ),
+
         const SizedBox(height: 5),
         const Text(
           "Based on 532 review",
@@ -603,45 +606,53 @@ class _RatingSheetTopState extends State<RatingSheetTop> {
   }
 
   Widget _buildExtraContentForLoggedInUsers() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Divider(thickness: 2), // 🔹 First divider
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HostelReviewPage()),
+        );
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Divider(thickness: 2), // 🔹 First divider
 
-        const SizedBox(height: 8),
-        const Text(
-          "Rate and Review",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 10),
+          const SizedBox(height: 8),
+          const Text(
+            "Rate and Review",
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
 
-        // 🔹 Row with avatar and stars
-        Row(
-          children: [
-            const CircleAvatar(
-              radius: 17,
-              backgroundImage: AssetImage(
-                "assets/profile6.png",
-              ), // replace with actual path
-            ),
-            const SizedBox(width: 12),
+          // 🔹 Row with avatar and stars
+          Row(
+            children: [
+              const CircleAvatar(
+                radius: 17,
+                backgroundImage: AssetImage(
+                  "assets/profile6.png",
+                ), // replace with actual path
+              ),
+              const SizedBox(width: 12),
 
-            // Generate 5 star icons
-            Row(
-              children: List.generate(5, (index) {
-                return Icon(
-                  Icons.star, // outlined star by default
-                  color: Color(0xFFE3E9ED),
-                  size: 28,
-                );
-              }),
-            ),
-          ],
-        ),
+              // Generate 5 star icons
+              Row(
+                children: List.generate(5, (index) {
+                  return Icon(
+                    Icons.star, // outlined star by default
+                    color: Color(0xFFE3E9ED),
+                    size: 28,
+                  );
+                }),
+              ),
+            ],
+          ),
 
-        const SizedBox(height: 10),
-        const Divider(thickness: 2), // 🔹 Second divider
-      ],
+          const SizedBox(height: 10),
+          const Divider(thickness: 2), // 🔹 Second divider
+        ],
+      ),
     );
   }
 }
