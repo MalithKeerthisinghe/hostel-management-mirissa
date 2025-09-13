@@ -32,8 +32,6 @@ class _HostelReviewPageState extends State<HostelReviewPage> {
   String? selectedTripType;
   String? selectedTravelCompanion;
 
-  @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
@@ -74,14 +72,31 @@ class _HostelReviewPageState extends State<HostelReviewPage> {
                     const SizedBox(height: 16),
                     _buildRatingsSection(),
                     const SizedBox(height: 24),
-                    _buildReviewTextField(),
-                    const SizedBox(height: 16),
-                    _buildUploadButton(),
-                    const SizedBox(height: 24),
+
+                    Material(
+                      color:
+                          Theme.of(
+                            context,
+                          ).scaffoldBackgroundColor, // same as page
+                      borderRadius: BorderRadius.circular(12.0),
+                      elevation: 1, // 🔹 shadow/elevation
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildReviewTextField(),
+                            const SizedBox(height: 16),
+                            _buildUploadButton(),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 60),
                     _buildTripTypeSection(),
                     const SizedBox(height: 16),
                     _buildTravelCompanionSection(),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 45),
                     _buildPostReviewButton(),
                   ],
                 ),
@@ -101,85 +116,122 @@ class _HostelReviewPageState extends State<HostelReviewPage> {
       ),
       padding: const EdgeInsets.all(12.0), // optional padding inside container
       child: Column(
-        children: List.generate(ratingCategories.length, (index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Row(
-              children: [
-                SvgPicture.asset(
-                  ratingIconPaths[index], // path to your SVG
-                  width: 27,
-                  height: 27,
-                  color: Colors.black, // optional
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Text(
-                    ratingCategories[index],
-                    style: const TextStyle(fontSize: 15),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        // 🔹 left-align title
+        children: [
+          const SizedBox(height: 15),
+          const Text(
+            "Rate your experience", // 🔹 your title
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12), // space between title and rows
+          // 🔹 your original rating rows untouched
+          ...List.generate(ratingCategories.length, (index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(
+                    ratingIconPaths[index], // path to your SVG
+                    width: 27,
+                    height: 27,
+                    color: Colors.black, // optional
                   ),
-                ),
-
-                // ⭐ Use Wrap for stars with spacing
-                Wrap(
-                  spacing: -25.0, // controls gap between stars
-                  children: List.generate(5, (starIndex) {
-                    return IconButton(
-                      onPressed: () {
-                        setState(() {
-                          ratings[index] = starIndex + 1.0;
-                        });
-                      },
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      icon: Icon(
-                        starIndex < ratings[index]
-                            ? Icons.star
-                            : Icons.star_border,
-                        color: Colors.amber,
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      ratingCategories[index],
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
                       ),
-                    );
-                  }),
-                ),
-              ],
-            ),
-          );
-        }),
+                    ),
+                  ),
+
+                  // ⭐ Use Wrap for stars with spacing
+                  Wrap(
+                    alignment: WrapAlignment.start,
+                    spacing: -25.0, // controls gap between stars
+                    children: List.generate(5, (starIndex) {
+                      return IconButton(
+                        onPressed: () {
+                          setState(() {
+                            ratings[index] = starIndex + 1.0;
+                          });
+                        },
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        icon: Icon(
+                          Icons.star_rounded, // always use the same icon shape
+                          color:
+                              starIndex < ratings[index]
+                                  ? Colors
+                                      .amber // ⭐ amber when clicked
+                                  : const Color(
+                                    0xFFE3E9ED,
+                                  ), // 🔹 light grey otherwise
+                        ),
+                      );
+                    }),
+                  ),
+                ],
+              ),
+            );
+          }),
+        ],
       ),
     );
   }
 
   Widget _buildReviewTextField() {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      child: const TextField(
-        maxLines: 5,
-        decoration: InputDecoration(
-          hintText: 'Tell others about your experience',
-          border: InputBorder.none,
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Container(
+        width: 300,
+        padding: const EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: Color(0xFFE5E7EB)),
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: const TextField(
+          maxLines: 5,
+          decoration: InputDecoration(
+            hintText: 'Tell others about your experience',
+            hintStyle: TextStyle(color: Colors.grey, fontSize: 13),
+            border: InputBorder.none,
+          ),
         ),
       ),
     );
   }
 
   Widget _buildUploadButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: OutlinedButton.icon(
-        onPressed: () {},
-        icon: const Icon(Icons.camera_alt),
-        label: const Text('Upload photos and videos'),
-        style: OutlinedButton.styleFrom(
-          foregroundColor: Colors.black,
-          side: BorderSide(color: Colors.grey.shade400),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: SizedBox(
+        width: 300,
+        child: ElevatedButton.icon(
+          onPressed: () {},
+          icon: SvgPicture.asset(
+            'assets/icons/camera.svg',
+            width: 25,
+            height: 25,
+            // ignore: deprecated_member_use
+            color: Color(
+              0xFF00358D,
+            ), // optional, remove if SVG already has color
           ),
-          padding: const EdgeInsets.symmetric(vertical: 16),
+          label: const Text('Upload photos and videos'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFE5E7EB), // 🔹 background color
+            foregroundColor: Colors.black, // 🔹 text/icon color
+            elevation: 0, // 🔹 flat look, no shadow
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+          ),
         ),
       ),
     );
@@ -191,7 +243,7 @@ class _HostelReviewPageState extends State<HostelReviewPage> {
       children: [
         const Text(
           'What kind of trip was it?',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
         ),
         const SizedBox(height: 8),
         Wrap(
@@ -208,11 +260,12 @@ class _HostelReviewPageState extends State<HostelReviewPage> {
                     });
                   },
                   selectedColor: Colors.blue.withOpacity(0.1),
-                  backgroundColor: Colors.grey[100],
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+                    borderRadius: BorderRadius.circular(100.0),
                     side: BorderSide(
-                      color: isSelected ? Colors.blue : Colors.grey.shade300,
+                      color: isSelected ? Colors.blue : Color(0xFFE5E7EB),
+                      width: 2,
                     ),
                   ),
                   labelStyle: TextStyle(
@@ -226,38 +279,57 @@ class _HostelReviewPageState extends State<HostelReviewPage> {
   }
 
   Widget _buildTravelCompanionSection() {
+    final companions = ['Solo', 'Couple', 'Family', 'Friends'];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
           'Who did you travel with?',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
         ),
         const SizedBox(height: 8),
         Wrap(
-          spacing: 8.0,
-          runSpacing: 8.0,
+          spacing: 8.0, // Horizontal space between buttons
+          runSpacing: 8.0, // Vertical space between rows
+          alignment: WrapAlignment.start,
           children:
-              ['Solo', 'Couple', 'Family', 'Friends'].map((companion) {
+              companions.map((companion) {
                 final isSelected = selectedTravelCompanion == companion;
-                return ChoiceChip(
-                  label: Text(companion),
-                  selected: isSelected,
-                  onSelected: (selected) {
-                    setState(() {
-                      selectedTravelCompanion = selected ? companion : null;
-                    });
-                  },
-                  selectedColor: Colors.blue.withOpacity(0.1),
-                  backgroundColor: Colors.grey[100],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    side: BorderSide(
-                      color: isSelected ? Colors.blue : Colors.grey.shade300,
+                return Container(
+                  width: 150.0,
+                  height: 50, // Fixed width for uniform size
+                  child: ChoiceChip(
+                    label: Center(
+                      child: Text(
+                        companion,
+                        style: TextStyle(
+                          color: isSelected ? Colors.blue : Colors.black87,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  ),
-                  labelStyle: TextStyle(
-                    color: isSelected ? Colors.blue : Colors.black87,
+                    selected: isSelected,
+                    onSelected: (selected) {
+                      setState(() {
+                        selectedTravelCompanion = selected ? companion : null;
+                      });
+                    },
+                    // ignore: deprecated_member_use
+                    selectedColor: Colors.blue.withOpacity(0.1),
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      side: BorderSide(
+                        color: isSelected ? Colors.blue : Color(0xFFE5E7EB),
+                        width: 2,
+                      ),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 0,
+                    ), // Remove extra padding
                   ),
                 );
               }).toList(),
@@ -269,19 +341,36 @@ class _HostelReviewPageState extends State<HostelReviewPage> {
   Widget _buildPostReviewButton() {
     return SizedBox(
       width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {
-          // Handle post review logic
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromRGBO(0, 119, 255, 1),
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xFF00B1D6), // Cyan at 0%
+              Color(0xFF00358D), // Dark blue at 100%
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: ElevatedButton(
+          onPressed: () {
+            // Handle post review logic
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.transparent, // Transparent to show gradient
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            shadowColor: Colors.transparent, // Remove default shadow
+          ),
+          child: const Text(
+            'Post Review',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
           ),
         ),
-        child: const Text('Post Review'),
       ),
     );
   }
